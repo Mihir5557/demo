@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_task_form2_inherit" model="ir.ui.view">
+        <field name="name">view.task.form2</field>
+        <field name="model">project.task</field>
+        <field name="priority" eval="16"/>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="priority_task_id"/>
+                <field name="story_points"/>
+                <field name="type_of_task_id" options="{'no_quick_create':True,'no_create_edit':True,'no_open': True,}"
+                       domain="[('project_id', '=', project_id)]"/>
+                <field name="last_update" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='task_dependencies']" position="after">
+                <page name="code_review_comment" string="Code Review Comment">
+                    <field name="code_review_comment_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="employee_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="desc"/>
+                            <field name="category_id"
+                                   options="{'no_open': True, 'no_quick_create': True, 'no_create_edit': True}"/>
+                            <field name="severity"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <field name="parent_id" position="attributes">
+                <attribute name="groups"></attribute>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_task_enhancement_module_kanban">
+        <field name="name">project.task.enhancement.module.kanban</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name = 'stage_id']" position="after">
+                <field name="type_of_task_id"/>
+                <field name="type_of_task_color"/>
+                <field name="priority_task_color"/>
+            </xpath>
+            <xpath expr="//field[@name= 'project_id']" position="after">
+                <br/>
+                <span style="margin-right:0.25rem;" invisible="not last_update">
+                    <b>
+                        <field name="last_update_label"/>
+                        :
+                    </b>
+                </span>
+                <field name="last_update" style="white-space: inherit !important;" invisiblel="not last_update"/>
+            </xpath>
+            <xpath expr="//main/div[1]" position="inside">
+                <t t-if="record.priority_task_id.raw_value">
+                    <span t-attf-style="color:#{record.priority_task_color.raw_value};">
+                        <i class="fa fa-arrow-up" title="Priority Task"/>
+                        <field name="priority_task_id"/>
+                    </span>
+                </t>
+            </xpath>
+
+            <xpath expr="//footer/div[2]" position="inside">
+                <t t-if="record.type_of_task_id.raw_value">
+                    <i class="fa fa-tasks" title="See All the related Tasks" t-attf-style="color:#{record.type_of_task_color.raw_value};"></i>
+                </t>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_task_enhancement_module_list">
+        <field name="name">project.task.enhancement.module.list</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field eval="2" name="priority"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name = 'project_id']" position="before">
+                <field name="type_of_task_id" string="Type Task"/>
+            </xpath>
+            <xpath expr="//field[@name = 'company_id']" position="before">
+                <field name="milestone_id"/>
+                <field name="task_priority"/>
+                <field name="story_points"/>
+            </xpath>
+            <xpath expr="//field[@name = 'name']" position="before">
+                <field name="id" string="Task Id" optional="hide"/>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="after">
+                <field name="sprint_id" string="Sprint" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_task_type_selection_list" model="ir.ui.view">
+        <field name="name">selection_type_list</field>
+        <field name="model">project.task.selection</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="project_id"/>
+                <field name="name"/>
+                <field name="color" widget="color"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="project_task_type_selection_view_form" model="ir.ui.view">
+        <field name="name">selection_type_form</field>
+        <field name="model">project.task.selection</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="project_id" string="Project"/>
+                    <field name="name" string="Type of Task"/>
+                    <field name="color" widget="color"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="project_task_type_selection_form" model="ir.actions.act_window">
+        <field name="name">Task Types</field>
+        <field name="res_model">project.task.selection</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="move_timesheet_entry_form_view" model="ir.ui.view">
+            <field name="name">move.timesheet.entry.form.view</field>
+            <field name="model">move.timesheet.entry</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group cols="2">
+                            <field name="project_id"/>
+                            <field name="task_id" domain="[('project_id', '=', project_id)]"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_move_entries" type="object" string="Move"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_move_timesheet_entry" model="ir.actions.act_window">
+            <field name="name">Move Timesheet Entries</field>
+            <field name="res_model">move.timesheet.entry</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

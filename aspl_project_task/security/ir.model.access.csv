@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_task_selection,access_project_task_selection,model_project_task_selection,base.group_user,1,1,1,1
+access_code_review_category,access.code.review.category,model_code_review_category,base.group_user,1,1,1,1
+access_code_review_comment,access.code.review.comment,model_code_review_comment,base.group_user,1,1,1,1
+access_task_priority,access.task_priority,model_task_priority,base.group_user,1,1,1,1
+access_project_task_completion_report,access.project.task.completion.report,model_project_task_completion_report,base.group_user,1,1,1,1

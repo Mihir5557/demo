@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="code_review_category_list_view" model="ir.ui.view">
+        <field name="name">Code Review Category</field>
+        <field name="model">code.review.category</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_code_review_category" model="ir.actions.act_window">
+        <field name="name">Code Review Category</field>
+        <field name="res_model">code.review.category</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="code_review_category_list_view"/>
+    </record>
+
+    <menuitem action="action_code_review_category"
+              id="menu_code_review_category"
+              name="Code Review Category"
+              parent="project.menu_project_config"
+              sequence="11"
+              groups="base.group_no_one"/>
+</odoo>
