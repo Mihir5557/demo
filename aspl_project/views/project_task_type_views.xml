@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inherit_view_project_task_type_filter" model="ir.ui.view">
+            <field name="name">inherit.project.task.type.search</field>
+            <field name="model">project.task.type</field>
+            <field name="priority" eval="45"/>
+            <field name="inherit_id" ref="project.task_type_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search/filter" position="after">
+                    <group expand="0" string="Group By">
+                        <filter
+                                string="Projects"
+                                name="group_projects"
+                                domain="[]"
+                                context="{'group_by':'project_ids'}"
+                        />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
