@@ -16,7 +16,7 @@
                 'aspl_project_task'],  # deprecated 'hr_timesheet_sheet',
     # always loaded
     'data': [
-        # 'security/new_record_rules.xml',
+        'security/new_record_rules.xml',
         'security/milestone_record_rules.xml',
         'security/ir.model.access.csv',
         'views/project_task_type_views.xml',
