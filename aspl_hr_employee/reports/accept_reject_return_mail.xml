@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Accept Return Mail Template-->
+    <record id="accept_return_mail_template" model="mail.template">
+        <field name="name">Accept Return Mail</field>
+        <field name="model_id" ref="aspl_hr_employee.model_hr_employee"/>
+        <field name="email_from">{{ ctx.get('receiver_mail') }}</field>
+        <field name="email_to">{{ ctx.get('sender_mail') }}</field>
+        <field name="subject">Unlock "{{ctx.get('letter_name')}}" Letter for {{object.name}}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; max-width: 600px; font-size: 14px; margin: 0 auto; ;padding: 0px; box-sizing: border-box;border:1px solid #ddd;">
+                <table class="body-wrap" style="width: 100%; border-collapse: collapse; border-spacing: 0;">
+                    <tbody>
+                        <tr>
+                            <td bgcolor="#FFFFFF">
+                                <div class="container"
+                                     style="display: block!important; max-width: 600px!important; margin: 0 auto!important; clear: both!important;">
+                                    <div class="content"
+                                         style="padding: 10px; max-width: 600px; margin: 0 auto; display: block;">
+                                        <table width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <br/>
+                                                        <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.4;">
+                                                            Hello, Your Request has been Approved.
+                                                        </p>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </field>
+    </record>
+
+    <!--Reject Return Mail Template-->
+    <record id="reject_return_mail_template" model="mail.template">
+        <field name="name">Reject Return Mail</field>
+        <field name="model_id" ref="aspl_hr_employee.model_hr_employee"/>
+        <field name="email_from">{{ ctx.get('receiver_mail') }}</field>
+        <field name="email_to">{{ ctx.get('sender_mail') }}</field>
+        <field name="subject">Lock "{{ctx.get('letter_name')}}" Letter for {{object.name}}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; max-width: 600px; font-size: 14px; margin: 0 auto; ;padding: 0px; box-sizing: border-box;border:1px solid #ddd;">
+                <table class="body-wrap" style="width: 100%; border-collapse: collapse; border-spacing: 0;">
+                    <tbody>
+                        <tr>
+                            <td bgcolor="#FFFFFF">
+                                <div class="container"
+                                     style="display: block!important; max-width: 600px!important; margin: 0 auto!important; clear: both!important;">
+                                    <div class="content"
+                                         style="padding: 10px; max-width: 600px; margin: 0 auto; display: block;">
+                                        <table width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <br/>
+                                                        <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.4;">
+                                                            Hello, Your Request has been Rejected.
+                                                        </p>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </field>
+    </record>
+
+</odoo>

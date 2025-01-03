@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="regeneration_letter_permission_wizard" model="ir.ui.view">
+        <field name="name">regeneration_letter_permission_wizard</field>
+        <field name="model">regeneration.letter.permission</field>
+        <field name="arch" type="xml">
+            <form string="Regeneration Letter Permission Wizard">
+                <field name="description" readonly="1"/>
+                <footer>
+                    <button name="send_email_administrator" string="Request Unlock" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_view_regeneration_letter_permission" model="ir.actions.act_window">
+        <field name="name">Regeneration Letter Permission</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">regeneration.letter.permission</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="regeneration_letter_permission_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

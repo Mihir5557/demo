@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Termination Letter Mail Template-->
+    <record id="termination_letter_mail_template" model="mail.template">
+        <field name="name">Termination Letter Mail</field>
+        <field name="model_id" ref="aspl_hr_employee.model_hr_employee"/>
+        <field name="email_from">{{(user.email)}}</field>
+        <field name="email_to">{{ ctx.get('mail_to') }}</field>
+        <field name="subject">Termination Letter from {{object.company_id.name}}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; max-width: 600px; font-size: 14px; margin: 0 auto; ;padding: 0px; box-sizing: border-box;border:1px solid #ddd;">
+                <table class="body-wrap" style="width: 100%; border-collapse: collapse; border-spacing: 0;">
+                    <tbody>
+                        <tr>
+                            <td bgcolor="#FFFFFF">
+                                <div class="container"
+                                     style="display: block!important; max-width: 600px!important; margin: 0 auto!important; clear: both!important;">
+                                    <div class="content"
+                                         style="padding: 10px; max-width: 600px; margin: 0 auto; display: block;">
+                                        <table width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <br/>
+                                                        Dear
+                                                        <t t-out="object.name"/>
+                                                        <br/>
+                                                        <p style="margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.4;">
+                                                            We are sending your Termination Letter as an attachment with
+                                                            this mail.
+                                                        </p>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </field>
+    </record>
+
+</odoo>

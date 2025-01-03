@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="doc_category_previous_employee" model="employee.document.category">
+            <field name="name">Previous Employment</field>
+        </record>
+        <record id="doc_category_current_employment" model="employee.document.category">
+            <field name="name">Current Employment</field>
+        </record>
+        <record id="doc_category_education" model="employee.document.category">
+            <field name="name">Education</field>
+        </record>
+
+    </data>
+</odoo>

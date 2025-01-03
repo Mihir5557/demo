@@ -1,0 +1,877 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--Inherited Employee Tree view-->
+        <record id="view_hr_employee_tree_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.tree.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="priority" eval="16"/>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <field name='name' position="before">
+                    <field name="employee_no"/>
+                </field>
+                <xpath expr="//field[@name='work_phone']" position="replace"/>
+
+                <field name="activity_ids" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </field>
+                <field name="activity_date_deadline" position="attributes">
+                    <attribute name="column_invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_hr_employee_document_pivot" model="ir.ui.view">
+            <field name="name">Hr Employee report: Pivot</field>
+            <field name="model">employee.document</field>
+            <field name="arch" type="xml">
+                <pivot string="Employee Document">
+                    <field name="employee_id" type="row"/>
+                    <field name="type_of_document" type="col"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id='employee_document_action_pivot' model='ir.actions.act_window'>
+            <field name="name">Employee Document Report</field>
+            <field name="res_model">employee.document</field>
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <menuitem action="employee_document_action_pivot"
+                  name="Employee Document Report"
+                  parent="hr.menu_hr_root"
+                  sequence="100"
+                  groups="hr.group_hr_manager"
+                  id="employee_document_menu"/>
+
+        <record id="create_application_action" model="ir.actions.server">
+            <field name="name">Generate Letter</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="binding_model_id" ref="model_hr_employee"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.letter()</field>
+            <field name="groups_id" eval="[(4, ref('base.group_erp_manager'))]"/>
+        </record>
+
+
+        <record id="view_hr_employee_form_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="priority" eval="16"/>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header/button[1]" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//header" position="inside">
+                    <button name="training" type="object" string="Training"
+                            class="oe_highlight"
+                            invisible="state_name not in ('New')"
+                            groups="hr.group_hr_manager"/>
+                    <button name="probation" type="object" string="Probation"
+                            class="oe_highlight "
+                            invisible="state_name not in ('New','Training')"
+                            groups="hr.group_hr_manager"/>
+                    <button name="confirmed" type="object" string="Confirm"
+                            class="oe_highlight "
+                            invisible="state_name not in ('Probation')"
+                            groups="hr.group_hr_manager"/>
+                    <button name="on_notice" type="object" string="Notice Period" class="oe_highlight "
+                            invisible="state_name not in ('Confirmed','Probation')"
+                            groups="hr.group_hr_manager"/>
+                    <button name="on_left_org" type="object" string="Employee Left" class="oe_highlight "
+                            invisible="state_name not in ('Training','Probation','Confirmed','Notice')"
+                            groups="hr.group_hr_manager"/>
+                    <button name="probation" type="object" string="Re Probation" class="oe_highlight "
+                            invisible="state_name not in ('Left Organization','Notice')"
+                            groups="hr.group_hr_manager"/>
+                    <button name="confirmed" type="object" string="Re Confirm" class="oe_highlight "
+                            invisible="state_name not in ('Left Organization','Notice')"
+                            groups="hr.group_hr_manager"/>
+                    <field name="emp_state" widget="statusbar" groups="hr.group_hr_manager"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='mobile_phone']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='work_phone']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='work_email']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='department_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='parent_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='coach_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='child_ids']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='job_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='category_ids']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+
+                <xpath expr="//form/sheet/div[2]" position="after">
+                    <field name="category_ids" widget="many2many_tags"
+                           options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"
+                           groups="hr.group_hr_user"/>
+                    <group>
+                        <group col="1">
+                            <group>
+                                <field name="employee_no_type" readonly="1"/>
+                                <field name="employee_no"/>
+                                <field name="state_name" invisible="1"/>
+                            </group>
+                            <group string="Experience">
+                                <field name="relative_experience"/>
+                                <field name="actual_experience"/>
+                                <field name="experience_graduation"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                            </group>
+
+                            <group>
+                                <div id="o_employee_right">
+                                    <h4 class="o_org_chart_title mb16 mt0">Organization Chart</h4>
+                                    <field name="child_ids" widget="hr_org_chart"/>
+                                </div>
+                            </group>
+                        </group>
+                    </group>
+                </xpath>
+
+                <xpath expr="//form/sheet/notebook/page[@name='personal_information']" position="before">
+                    <!--  Joining Details-->
+                    <page name="joining" string="Joining">
+                        <group string="Training"
+                               invisible="not join_training_date and state_name in ('Left Organization','Notice','Probation')">
+                            <group>
+                                <field name="trainee_no"/>
+                                <field name="join_training_date"
+                                       required="employee_no_type == 'trainee'"/>
+                            </group>
+                            <group>
+                                <label for="training_period" string="Training Period"/>
+                                <div>
+                                    <field name="training_period" placeholder="Enter months" class="oe_inline"
+                                           required="employee_no_type == 'trainee'"/>
+                                    Months
+                                </div>
+                                <field name="training_end_date"/>
+                            </group>
+                        </group>
+                        <group><!-- string="Joining Details" -->
+                            <group string="Probation">
+                                <field name="join_date"
+                                       required="employee_no_type in ('temporary_employee','permanent_employee','consultant')"/>
+                                <label for="probation_period" string="Probation Period"/>
+                                <div>
+                                    <field name="probation_period" placeholder="Enter months" class="oe_inline"
+                                           required="employee_no_type in  ('temporary_employee','permanent_employee')"/>
+                                    Months
+                                </div>
+                                <field name="probation_end_date"/>
+                            </group>
+                            <group string="Confirm">
+                                <field name="confirm_date"
+                                       required="emp_state in ('confirmed','on_notice')"/>
+                            </group>
+                            <group string="Notice">
+                                <label for="notice_period" string="Notice Period"
+                                       required="emp_state in ('on_notice')"/>
+                                <div>
+                                    <field name="notice_period" placeholder="Enter months"
+                                           on_change="onchange_notice_period(notice_period)"
+                                           class="oe_inline"/>
+                                    Months
+                                </div>
+                            </group>
+                            <group string="Bond Period">
+                                <field name="bond_start_date"/>
+                                <label for="bond_period" string="Bond Period"/>
+                                <div>
+                                    <field name="bond_period" placeholder="Enter months" class="oe_inline"/>
+                                    Months
+                                </div>
+                                <field name="bond_end_date"/>
+                            </group>
+
+
+                        </group>
+                    </page>
+
+                    <page name="separation" string="Separation"
+                          invisible="state_name not in ('Notice', 'Left Organization')"
+                          groups="hr.group_hr_user">
+                        <group>
+                            <group>
+                                <field name="separation_mode" widget="selection"/>
+                            </group>
+                            <group groups="base.group_erp_manager">
+                                <button name="send_termination_letter" string="Send Termination Letter" type="object"
+                                        class="btn-primary"
+                                        invisible="separation_mode not in ('absconding', 'terminated')"/>
+                            </group>
+                        </group>
+                        <form>
+                            <sheet>
+                                <group invisible="separation_mode == 'resigned'">
+                                    <field name="left_date"/>
+                                    <field name="demise"
+                                           invisible="separation_mode != 'expired'"/>
+                                    <field name="retired_date"
+                                           invisible="separation_mode != 'retired'"/>
+                                    <field name="remarks" placeholder="remarks..."/>
+                                </group>
+                                <group invisible="separation_mode != 'resigned'">
+                                    <group string="Resignation Details">
+                                        <field name="resignation_date"
+                                               required="separation_mode == 'resigned'"/>
+                                        <field name="leaving_rason"
+                                               required="separation_mode  == 'resigned'"/>
+                                        <field name="notice_required"/>
+                                        <label for="resigned_notice_period" string="Notice Period"/>
+                                        <div>
+                                            <field name="resigned_notice_period" placeholder="Enter months"
+                                                   class="oe_inline"/>
+                                            Months
+                                        </div>
+
+                                        <field name="tentative_leaving_date" readonly="1" force_save="1"/>
+                                        <field name="remarks"/>
+                                    </group>
+                                    <group string="Exit Interview">
+                                        <field name="interview_date"/>
+                                        <field name="note"/>
+                                    </group>
+                                    <group string="Exit Detail">
+                                        <field name="leaving_date"/>
+                                        <field name="settled_date"/>
+                                        <field name="notice_served"/>
+                                        <field name="rehired"/>
+                                        <field name="exitRemark"/>
+                                        <field name="history"/>
+
+                                    </group>
+
+                                    <group string="Short Fall">
+                                        <label for="short_notice_period" string="Short Fall in Notice Period"/>
+                                        <div name='short_notice_div'>
+                                            <field name="short_notice_period" class="oe_inline"/>
+                                            Days
+                                        </div>
+
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </page>
+                    <!--End employee Separation detail-->
+
+
+                    <!-- Employee position history-->
+                    <page name="appraisal" string="Appraisal" groups="hr.group_hr_manager">
+                        <group>
+                            <group string="Appraisal">
+                                <field name="appraisal_date" force_save="1"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="appraisal_ids" nolabel="1">
+                                <list delete="1" default_order='appraisal_date desc'>
+                                    <field name="appraisal_date" force_save="1"/>
+                                    <field name="old_ctc"/>
+                                    <field name="new_ctc"/>
+                                    <field name="percentage_hike"/>
+                                    <field name="document_name" invisible="1"/>
+                                    <field name="document" filename="document_name" widget="binary"
+                                           style="white-space: normal;"/>
+                                    <field name="months"/>
+                                    <field name="appraisal_note"/>
+                                    <button name="generate_employee_letter" string="Generate Letter" type="object"
+                                            class="btn-primary"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="appraisal_date" required="1"/>
+
+                                            <field name="document_name" invisible="1"/>
+                                            <field name="document" filename="document_name"/>
+                                            <field name="meeting_document_name" invisible="1"/>
+                                            <field name="meeting_document" filename="meeting_document_name"/>
+                                        </group>
+                                        <group>
+                                            <field name="old_ctc"/>
+                                            <field name="new_ctc"/>
+                                            <field name="percentage_hike" readonly="1"/>
+                                            <field name="appraisal_note"/>
+                                            <field name="status" required="1" invisible="1"/>
+                                            <field name="accept_token" invisible="1"/>
+                                            <field name="reject_token" invisible="1"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </group>
+                    </page>
+
+                    <!-- Employee position history-->
+                    <page name="position" string="Position">
+                        <group>
+                            <group string="Reporting">
+                                <field name="position_reporting" nolabel="1"
+                                       required="emp_state != 'confirmed'">
+                                    <list delete="false">
+                                        <field name="parent_id"
+                                               context="{'form_view_ref': 'hr_aspire.hr_all_employee_form_view'}"/>
+                                        <field name="effective_from"/>
+                                        <field name="effective_to"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="category_type" invisible="1"/>
+                                                <field name="parent_id" domain="[('with_organization', '=', True)]"
+                                                       context="{'form_view_ref': 'hr_aspire.hr_all_employee_form_view'}"
+                                                       options="{'no_create': True, 'no_create_edit':True}"/>
+                                                <field name="effective_from"/>
+                                                <field name="effective_to"/>
+                                            </group>
+                                            <group>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </group>
+                            <group string="Designation">
+                                <field name="position_designation" nolabel="1" widget="one2many_list">
+                                    <list>
+                                        <field name="job_id"/>
+                                        <field name="effective_from"/>
+                                        <field name="effective_to"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="category_type" invisible="1"/>
+                                                <field name="job_id"
+                                                       options="{'no_create': True, 'no_create_edit':True}"/>
+                                                <field name="effective_from"/>
+                                                <field name="effective_to"/>
+                                            </group>
+                                            <group>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </group>
+                            <group string="Department">
+                                <field name="position_department" nolabel="1" widget="one2many_list">
+                                    <list>
+                                        <field name="department_id"/>
+                                        <field name="effective_from"/>
+                                        <field name="effective_to"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="category_type" invisible="1"/>
+                                                <field name="department_id"
+                                                       options="{'no_create': True, 'no_create_edit':True}"/>
+                                                <field name="effective_from"/>
+                                                <field name="effective_to"/>
+                                            </group>
+                                            <group>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </group>
+                            <group string="Location">
+                                <field name="position_location" nolabel="1" widget="one2many_list">
+                                    <list>
+                                        <field name="location_city"/>
+                                        <field name="effective_from"/>
+                                        <field name="effective_to"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="category_type" invisible="1"/>
+                                                <field name="effective_from"/>
+                                                <field name="effective_to"/>
+                                                <field name="location_street"/>
+                                            </group>
+                                            <group>
+                                                <field name="location_city"/>
+                                                <field name="location_pcode"/>
+                                                <field name="location_id"/>
+                                                <field name="location_county"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </group>
+
+                            <group string="Company">
+                                <field name="position_company" nolabel="1" widget="one2many_list">
+                                    <list delete="1">
+                                        <field name="id"/>
+                                        <field name="company_id"/>
+                                        <field name="company_employment_type"/>
+                                        <field name="employee_no"/>
+                                        <field name="effective_from"/>
+                                        <field name="effective_to" force_save="1"/>
+                                    </list>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="category_type" invisible="1"/>
+                                                <field name="company_id" required="1"
+                                                       options="{'no_create': True, 'no_create_edit':True}"/>
+                                                <field name="company_employment_type" required="1"/>
+                                                <field name="employee_no"/>
+                                            </group>
+                                            <group>
+                                                <field name="effective_from"/>
+                                                <field name="effective_to"/>
+                                            </group>
+                                        </group>
+
+                                        <div style="Display:flex;gap:5px;">
+                                            <button name="generate_sequence_employee" type="object" string="Generate No"
+                                                    class="oe_highlight"/>
+                                            <button name="get_previous_sequence_employee" type="object"
+                                                    string="Previous No" class="oe_highlight"/>
+                                        </div>
+                                    </form>
+                                </field>
+                            </group>
+                        </group>
+                    </page>
+
+                    <!-- Employee document-->
+                    <page name="document" string="Document">
+
+                        <notebook>
+                            <page name="previous_document" string="Previous Employment">
+                                <group string="Documents">
+                                    <field name="employee_document_previous_ids" nolabel="1"
+                                           context="{'default_type':'past'}">
+                                        <list>
+                                            <field name="document_name"/>
+                                            <field name="type"/>
+                                            <button name="download_document" type="object" class="btn-link"
+                                                    icon="fa-download"/>
+                                        </list>
+                                        <form>
+                                            <group string="Document" col="1">
+                                                <group>
+                                                    <field name="type"
+                                                           value="Previous employment"
+                                                           invisible='1'
+                                                    />
+                                                </group>
+                                                <group>
+                                                    <group>
+                                                        <field name="type_of_document"
+                                                               options="{'no_create_edit':True,'no_create':True}"
+                                                               domain="[('document_type', '=', 'Previous Employment')]"/>
+                                                        <field name="report_type"/>
+                                                        <field name="document_name" invisible="1"/>
+                                                        <field name="document" filename="document_name"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="attached_date"/>
+                                                        <field name="document_description"/>
+                                                    </group>
+                                                </group>
+                                            </group>
+
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="current_document" string="Current Employment">
+                                <group string="Documents">
+                                    <field name="employee_document_current_ids" nolabel="1"
+                                           context="{'default_type':'current'}">
+                                        <list>
+                                            <field name="document_name"/>
+                                            <field name="type"/>
+                                            <button name="download_document" type="object" class="btn-link"
+                                                    icon="fa-download"/>
+                                        </list>
+                                        <form>
+                                            <group string="Document" col="1">
+                                                <group>
+                                                    <field name="type" invisible='1'/>
+                                                </group>
+                                                <group>
+                                                    <group>
+                                                        <field name="type_of_document"
+                                                               invisible="not type"
+                                                               options="{'no_create_edit':True,'no_create':True}"
+                                                               domain="[('document_type', '=', 'Current Employment')]"/>
+                                                        <field name="report_type"
+                                                               invisible="not type"/>
+                                                        <field name="document_name" invisible="not type"/>
+                                                        <field name="document" filename="document_name"
+                                                               invisible="not type"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="attached_date"
+                                                               invisible="not type"/>
+                                                        <field name="document_description"
+                                                               invisible="not type"/>
+                                                        <field name="status" required="1" invisible="1"/>
+                                                        <field name="accept_token" invisible="1"/>
+                                                        <field name="reject_token" invisible="1"/>
+                                                    </group>
+                                                </group>
+                                            </group>
+
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="education_document" string="Education">
+                                <group string="Documents">
+                                    <field name="employee_document_education_ids" nolabel="1"
+                                           context="{'default_type':'education'}">
+                                        <list>
+                                            <field name="document_name"/>
+                                            <field name="type"/>
+                                            <button name="download_document" type="object" class="btn-link"
+                                                    icon="fa-download"/>
+                                        </list>
+                                        <form>
+                                            <group string="Document" col="1">
+                                                <group>
+                                                    <field name="type" invisible='1'/>
+                                                </group>
+                                                <group>
+                                                    <group>
+                                                        <field name="type_of_document"
+                                                               invisible="not type"
+                                                               options="{'no_create_edit':True,'no_create':True}"
+                                                               domain="[('document_type', '=', 'Education')]"/>
+                                                        <field name="report_type"
+                                                               invisible="not type"/>
+                                                        <field name="document_name" invisible="1"
+                                                        />
+                                                        <field name="document" filename="document_name"
+                                                               invisible="not type"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="attached_date"
+                                                               invisible="not type"/>
+                                                        <field name="document_description"
+                                                               invisible="not type"/>
+                                                    </group>
+                                                </group>
+                                            </group>
+
+                                        </form>
+                                    </field>
+                                </group>
+                            </page>
+
+                            <page name="employee_identity" string="Identity">
+                                <group string="Employee Identity">
+                                    <field name="employee_identity_ids" nolabel="1">
+                                        <list>
+                                            <field name="complete_name"/>
+                                            <field name="document_name"/>
+                                            <button name="download_document" type="object" class="btn-link"
+                                                    icon="fa-download"/>
+                                        </list>
+                                    </field>
+                                </group>
+                            </page>
+
+                        </notebook>
+                    </page>
+
+
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[@name='public']/div" position="replace"/>
+                <xpath expr="//form/sheet/notebook/page[@name='public']" position="inside">
+                    <notebook>
+                        <page name="public" string="General">
+                            <div id="o_work_employee_container"> <!-- These two div are used to position org_chart -->
+                                <div id="o_work_employee_main">
+                                    <group string="Work Details">
+
+                                        <field name="work_phone"/>
+                                        <field name="work_email"/>
+                                        <field name="department_id"/>
+                                        <field name="parent_id" domain="[('with_organization', '=', True)]"/>
+                                        <field name="coach_id" domain="[('with_organization', '=', True)]"/>
+                                    </group>
+                                    <group string="Location">
+                                        <field name="address_id" context="{'show_address': 1}"
+                                               options="{&quot;always_reload&quot;: True, &quot;highlight_first_line&quot;: True}"/>
+                                        <field name="work_location_id" context="{'default_address_id': address_id}"/>
+                                    </group>
+                                    <group name="managers" string="Approvers" class="hide-group-if-empty">
+                                        <!-- is overridden in other hr related modules -->
+                                    </group>
+                                    <group name="departure" string="Departure"
+                                           invisible="active">
+                                        <field name="departure_reason_id"
+                                               options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                                        <field name="departure_description"/>
+                                        <field name="departure_date"/>
+                                    </group>
+                                    <group string="Schedule">
+                                        <field name="resource_calendar_id" required="1"/>
+                                        <field name="id" invisible="1"/>
+                                        <field name="tz" required="id"/>
+                                    </group>
+                                </div>
+                            </div>
+                        </page>
+                        <page name="bank_detail" string="BANK/PF/ESI">
+                            <group>
+                                <group string=" Bank Information">
+                                    <field name="bank_id"
+                                           options="{'no_create': True, 'no_create_edit':True, 'no_open':True}"/>
+                                    <field name="account_type_id"/>
+                                    <field name="address_home_id"
+                                           context="{'show_address': 1,'default_type': 'private','form_view_ref': 'base.res_partner_view_form_private'}"
+                                           options="{&quot;always_reload&quot;: True, &quot;highlight_first_line&quot;: True}"
+                                           groups="base.group_system"/>
+                                    <field name="bank_record_name"/>
+                                    <field name="bank_account_no"/>
+                                    <!-- <field name="bank_account_id" groups="base.group_system"/> -->
+                                </group>
+                                <group string="PF Account"
+                                       invisible="employee_no_type in ('consultant_aspire', 'consultant_other')">
+                                    <field name="pf_employee"/>
+                                    <field name="uan"
+                                           invisible="not pf_employee"/>
+                                    <field name="pf_number"
+                                           invisible="not pf_employee"/>
+                                    <field name="pf_date" invisible="not pf_employee"/>
+                                    <field name="family_pf_no" invisible="not pf_employee"/>
+                                </group>
+                                <group string="ESI Account"
+                                       invisible="employee_no_type in ('consultant_aspire', 'consultant_other')">
+                                    <field name="esi_employee"/>
+                                    <field name="esi_no" invisible="not esi_employee"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </xpath>
+
+                <xpath expr="//group[@name='active_group']" position="inside">
+                    <field name="with_organization"/>
+                    <field name="contracted"/>
+                    <field name="welcome_image"/>
+                </xpath>
+
+
+                <xpath expr="//group[@name='active_group']//field[@name='user_id']" position="attributes">
+                    <attribute name="options">{'no_create': True, 'no_create_edit':True, 'no_open': True}</attribute>
+                </xpath>
+
+                <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group" position="replace"/>
+                <xpath expr="//form/sheet/notebook/page[@name='personal_information']" position="inside">
+                    <notebook>
+                        <page name="personal_detail" string="General">
+                            <div style="position:relative;">
+                                <group col="2">
+
+                                    <group string="Citizenship">
+                                        <field name="country_id"
+                                               options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+
+                                        <field name="gender"/>
+                                        <field name="birthday"/>
+
+                                    </group>
+                                    <group string="Marital Status">
+                                        <field name="marital"/>
+                                        <field name="spouse_complete_name"
+                                               invisible="marital not in ('married', 'cohabitant', 'widower', 'divorced')"
+                                               groups="hr.group_hr_user"/>
+                                        <field name="spouse_birthdate"
+                                               invisible="marital not in ('married', 'cohabitant', 'widower', 'divorced')"
+                                               groups="hr.group_hr_user"/>
+                                    </group>
+                                    <group string="Dependant">
+                                        <field name="children"
+                                               invisible="marital not in ('married', 'cohabitant', 'widower', 'divorced')"
+                                               groups="hr.group_hr_user"/>
+                                    </group>
+                                    <group string="Emergency">
+                                        <field name="emergency_contact"/>
+                                        <field name="emergency_phone" class="o_force_ltr"/>
+                                    </group>
+
+                                </group>
+                                <group string="Personal Details" col="2">
+                                    <group>
+                                        <field name="personal_email"/>
+                                        <field name="blood_group"/>
+                                        <field name="religion"/>
+                                        <field name="marital" invisible="1"/>
+                                        <field name="marriage_date" invisible="marital != 'married'"/>
+                                    </group>
+
+                                    <group>
+                                        <field name="international_employee"/>
+                                        <field name="physically_challenged"/>
+                                    </group>
+
+                                    <group string="Permanent Address">
+                                        <label for="per_street" string="Permanent Address"/>
+                                        <div>
+                                            <field name="per_street" placeholder="Street"/>
+                                            <field name="per_landmark" placeholder="Landmark"/>
+                                            <field name="per_pcode" placeholder="Pin code"/>
+                                            <field name="per_city" placeholder="City"/>
+                                            <field name="per_state_id" placeholder="State"
+                                                   domain="[('country_id', '=', per_county_id)]"/>
+                                            <field name="per_county_id" placeholder='Country'/>
+                                        </div>
+                                        <field name="per_phone1" string="Mobile no."/>
+
+                                    </group>
+
+                                    <group string="Present Address">
+                                        <field name="isPresentAddSameAsPermanent"/>
+                                        <label for="pre_street" string="Present Address"/>
+                                        <div>
+                                            <field name="pre_street" placeholder="Street"
+                                                   required="not isPresentAddSameAsPermanent"/>
+                                            <field name="pre_landmark" placeholder="Landmark"/>
+                                            <field name="pre_pcode" placeholder="Pin code"
+                                                   required="not isPresentAddSameAsPermanent"/>
+                                            <field name="pre_city" placeholder="City"
+                                                   required="not isPresentAddSameAsPermanent"/>
+                                            <field name="pre_state_id" placeholder="State"
+                                                   required="not isPresentAddSameAsPermanent"
+                                                   domain="[('country_id', '=', pre_county_id)]"/>
+                                            <field name="pre_county_id" placeholder='Country'
+                                                   required="not isPresentAddSameAsPermanent"/>
+                                        </div>
+
+                                        <field name="pre_phone1"
+                                               required="not isPresentAddSameAsPermanent" invisible="1"/>
+                                        <field name="pre_phone2"
+                                               required="not isPresentAddSameAsPermanent" invisible="1"/>
+                                    </group>
+                                </group>
+
+                            </div>
+                        </page>
+
+                        <page name="family" string="Family">
+                            <group string="Family Member">
+                                <field name="family_member_ids" nolabel="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="relation"/>
+                                        <field name="birth_date"/>
+                                        <field name="blood_group"/>
+                                        <field name="gender"/>
+                                        <field name="nationality"/>
+                                        <field name="profession"/>
+                                    </list>
+                                    <form string="Family Member Information">
+                                        <sheet>
+                                            <group>
+                                                <group string="Personal Details">
+                                                    <field name="name"/>
+                                                    <field name="relation"/>
+                                                    <field name="birth_date"/>
+                                                    <field name="blood_group"/>
+                                                    <field name="gender"/>
+                                                    <field name="nationality" options="{'no_quick_create': True}"/>
+                                                    <field name="profession"/>
+                                                    <field name="home_phone"/>
+                                                    <field name="remarks"/>
+                                                </group>
+
+                                                <group string="Address">
+                                                    <field name="check_per_address"/>
+                                                    <field name="copy_address_from"
+                                                           invisible="not check_per_address"
+                                                           required="check_per_address"/>
+                                                    <field name="home_street"/>
+                                                    <field name="home_city"/>
+                                                    <field name="home_landmark"/>
+                                                    <field name="home_pcode"/>
+                                                    <field name="home_state" options="{'no_quick_create': True}"/>
+                                                    <field name="home_county" options="{'no_quick_create': True}"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </xpath>
+
+                <field name='company_id' position="attributes">
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="required">0</attribute>
+                    <attribute name="options">{'no_open': True}</attribute>
+                </field>
+                <xpath expr="//form/sheet/group/group[1]/field[@name='company_id']" position="replace">
+                    <field name='company_id' readonly="1" options="{'no_open': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <menuitem
+                id="hr.menu_hr_employee_user"
+                name="Employees"
+                action="hr.open_view_employee_list_my"
+                parent="hr.menu_hr_employee_payroll"
+                sequence="1"
+                groups="hr.group_hr_manager"/>
+
+        <!-- Modified Configuration group from officer to manager-->
+        <!--Department-->
+        <record id="hr.menu_hr_department_kanban" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('hr.group_hr_manager')])]"/>
+        </record>
+        <!--Configuration-->
+        <record id="hr.menu_human_resources_configuration" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('hr.group_hr_manager')])]"/>
+        </record>
+
+    </data>
+</odoo>

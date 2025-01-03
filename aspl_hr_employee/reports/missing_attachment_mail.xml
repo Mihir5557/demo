@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--Missing Attachment Mail Template-->
+    <record id="missing_attachment_mail_template" model="mail.template">
+        <field name="name">Missing Attachment Mail</field>
+        <field name="model_id" ref="aspl_hr_employee.model_hr_employee"/>
+        <field name="email_from">{{ 'noreply@aspiresoftserv.com' }}</field>
+        <field name="email_to">{{ ctx.get('mail_to') }}</field>
+        <field name="reply_to">{{ 'noreply@aspiresoftserv.com' }}</field>
+        <field name="subject">Missing Document's</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; max-width: 700px; font-size: 14px; margin: 0 auto; ;padding: 0px; box-sizing: border-box;border:1px solid #ddd;">
+                <!-- BODY -->
+                <table class="body-wrap" style="width: 100%; border-collapse: collapse; border-spacing: 0;">
+                    <tbody>
+                        <tr>
+                            <td bgcolor="#FFFFFF">
+                                <div class="container"
+                                     style="display: block!important; max-width: 600px!important; margin: 0 auto!important; clear: both!important;">
+                                    <div class="content"
+                                         style="max-width: 100%; margin: 0 auto; display: block;">
+                                        <table style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+                                            <tbody>
+                                                <t t-foreach="ctx.get('content')" t-as="emp_name">
+                                                    <tr>
+                                                        <td>
+                                                            <t t-out="emp_name"/>
+                                                        </td>
+                                                        <td></td>
+                                                        <t t-foreach="ctx.get('content').get(emp_name)"
+                                                           t-as="missing_letters">
+                                                            <td>
+                                                                <t t-out="missing_letters"/>,
+                                                            </td>
+                                                        </t>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </field>
+    </record>
+
+</odoo>

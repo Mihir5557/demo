@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    Accept Admin Template-->
+    <template id="accept_admin_template" name="Accept Admin Template">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container" style="margin-top: 30px;">
+                    <div id="stage" class="form-all">
+                        <div style="text-align:center;">
+                            <h1 style="text-align:center;font-family: 'Source Sans Pro';">
+                                You have been successfully Approve document request.
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!--    Reject Admin Template-->
+    <template id="reject_admin_template" name="Reject Admin Template">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container" style="margin-top: 30px;">
+                    <div id="stage" class="form-all">
+                        <div style="text-align:center;">
+                            <h1 style="text-align:center;font-family: 'Source Sans Pro';">
+                                You have been successfully Reject document request.
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!--    Double-Click Admin Template-->
+    <template id="admin_double_click_template" name="Double Click Admin Template">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container" style="margin-top: 30px;">
+                    <div id="stage" class="form-all">
+                        <div style="text-align:center;">
+                            <h1 style="text-align:center;font-family: 'Source Sans Pro';">
+                                You have been Double-Click.
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!--    Letter Not Found Admin Template-->
+    <template id="letter_not_found_template" name="Letter Not Found Admin Template">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container" style="margin-top: 30px;">
+                    <div id="stage" class="form-all">
+                        <div style="text-align:center;">
+                            <h1 style="text-align:center;font-family: 'Source Sans Pro';">
+                                Letter Not Found !!!
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
+
+
+

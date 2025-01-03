@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="emp_stage_new" model="hr.employee.stage">
+            <field name="name">New</field>
+            <field name="field_name">new</field>
+        </record>
+
+        <record id="emp_stage_training" model="hr.employee.stage">
+            <field name="name">Training</field>
+            <field name="field_name">training</field>
+        </record>
+
+        <record id="emp_stage_probation" model="hr.employee.stage">
+            <field name="name">Probation</field>
+            <field name="field_name">probation</field>
+        </record>
+
+        <record id="emp_stage_confirmed" model="hr.employee.stage">
+            <field name="name">Confirmed</field>
+            <field name="field_name">confirmed</field>
+        </record>
+
+        <record id="emp_stage_notice_period" model="hr.employee.stage">
+            <field name="name">On Notice Period</field>
+            <field name="field_name">on_notice</field>
+        </record>
+
+    </data>
+</odoo>

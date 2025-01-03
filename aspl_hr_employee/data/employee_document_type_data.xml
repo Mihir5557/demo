@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="doc_type_offer_trainee" model="employee.document.type">
+            <field name="name">Offer Trainee</field>
+        </record>
+        <record id="doc_type_offer_experience" model="employee.document.type">
+            <field name="name">Offer Experience</field>
+        </record>
+        <record id="doc_type_appointment" model="employee.document.type">
+            <field name="name">Appointment</field>
+        </record>
+        <record id="doc_type_appointment_and_Increment-Consultant" model="employee.document.type">
+            <field name="name">Appointment and Increment-Consultant</field>
+        </record>
+        <record id="doc_type_appraisal" model="employee.document.type">
+            <field name="name">Appraisal</field>
+        </record>
+        <record id="doc_type_confirmation" model="employee.document.type">
+            <field name="name">Confirmation</field>
+        </record>
+        <record id="doc_type_experience_and_relieving" model="employee.document.type">
+            <field name="name">Experience and Relieving</field>
+        </record>
+        <record id="doc_type_termination" model="employee.document.type">
+            <field name="name">Termination</field>
+        </record>
+        <record id="doc_type_nda" model="employee.document.type">
+            <field name="name">NDA</field>
+        </record>
+        <record id="doc_type_nomination" model="employee.document.type">
+            <field name="name">Nomination</field>
+        </record>
+        <record id="doc_type_exit_form" model="employee.document.type">
+            <field name="name">Exit Form</field>
+        </record>
+        <record id="doc_type_payslip" model="employee.document.type">
+            <field name="name">PaySlip</field>
+        </record>
+        <record id="doc_type_other" model="employee.document.type">
+            <field name="name">Other</field>
+        </record>
+
+    </data>
+</odoo>

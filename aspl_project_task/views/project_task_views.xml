@@ -81,7 +81,7 @@
                 <field name="type_of_task_id" string="Type Task"/>
             </xpath>
             <xpath expr="//field[@name = 'company_id']" position="before">
-                <field name="milestone_id"/>
+<!--                <field name="milestone_id"/>-->
                 <field name="task_priority"/>
                 <field name="story_points"/>
             </xpath>

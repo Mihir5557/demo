@@ -11,14 +11,14 @@ class Task(models.Model):
 
     effective_hours = fields.Float("Hours Spent", compute='_compute_effective_hours', compute_sudo=True, store=True, help="Time spent on this task, excluding its sub-tasks.")
     reopen_count = fields.Integer(string="Reopen Count")
-    is_closed = fields.Boolean(string='Closing Stage')
+    # is_closed = fields.Boolean(string='Closing Stage')
     display_project_id = fields.Many2one('project.project')
     planned_hours = fields.Float(string="Initially Planned Hours")
 
-    @api.onchange('stage_id')
-    def _onchange_stage_id(self):
-        for rec in self:
-            rec.is_closed = True if rec.stage_id.is_closed else False
+    # @api.onchange('stage_id')
+    # def _onchange_stage_id(self):
+    #     for rec in self:
+    #         rec.is_closed = True if rec.stage_id.is_closed else False
 
     def action_reopen(self):
         try:

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="send_termination_letter_wizard" model="ir.ui.view">
+        <field name="name">send_termination_letter_wizard</field>
+        <field name="model">send.termination.letter</field>
+        <field name="arch" type="xml">
+            <form string="Send Termination Letter Wizard">
+                <field name="description" readonly="1"/>
+                <footer>
+                    <button name="send_email_employee" string="Send Mail" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_view_send_termination_letter" model="ir.actions.act_window">
+        <field name="name">Send Termination Letter</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">send.termination.letter</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="send_termination_letter_wizard"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

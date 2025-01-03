@@ -5,7 +5,7 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class yimesheetTaskChange(models.TransientModel):
+class timesheetTaskChange(models.TransientModel):
     _name = "timesheet.task.change"
     _description = "Timesheet Task Change"
 

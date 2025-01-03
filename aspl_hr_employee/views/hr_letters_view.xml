@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_letters_form" model="ir.ui.view">
+        <field name="name">hr.letters.form</field>
+        <field name="model">hr.letters</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="attachment" filename="name" widget="binary" required="1"/>
+                        </group>
+                        <group>
+                            <field name="allowed_in_stages" required="1" widget="many2many_tags"/>
+                            <field name="document_type_id" required="1"
+                                   options="{'no_create_edit':True,'no_create':True}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <notebook>
+                            <page name="placeholders" string="Placeholders">
+                                <field name="hr_letter_placeholders_line_ids" nolable="1">
+                                    <form>
+                                        <group>
+
+                                            <!--  Configration Of Field's  -->
+                                            <field name="hr_letters_id" invisible="1"/>
+                                            <field name="fields_direction" required="1"/>
+
+                                            <!--  Static Field's  -->
+                                            <field name="static_fields"
+                                                   invisible="fields_direction == 'dynamic'"/>
+
+                                            <!--  Dynamic Field's  -->
+                                            <field name="model_object"
+                                                   domain="[('model', '=', 'hr.employee')]"
+                                                   invisible="fields_direction != 'dynamic'"/>
+                                            <field name="field_object"
+                                                   domain="[('model_id', '=', model_object), ('ttype', 'not in', ('boolean', 'binary', 'many2one_reference', 'reference'))]"
+                                                   invisible="not model_object"/>
+                                            <field name="field_object_type" invisible="1"/>
+                                            <field name="sub_model_object" readonly="1"
+                                                   invisible="field_object_type not in ('many2many', 'many2one', 'one2many')"/>
+                                            <field name="sub_field_object"
+                                                   domain="[('model_id', '=', sub_model_object), ('ttype', 'not in', ('many2many', 'many2one', 'one2many', 'boolean', 'binary', 'many2one_reference', 'reference'))]"
+                                                   invisible="field_object_type not in ('many2many', 'many2one', 'one2many')"/>
+                                            <field name="sub_field_object_type" invisible="1"/>
+                                            <field name="date_format"
+                                                   invisible="field_object_type not in ('date', 'datetime') and sub_field_object_type not in ('date', 'datetime') and static_fields != 'today'"/>
+                                            <field name="sample_date_format" readonly="1"
+                                                   invisible="field_object_type not in ('date', 'datetime') and sub_field_object_type not in ('date', 'datetime') and static_fields != 'today'"/>
+                                            <field name="num2word"
+                                                   invisible="field_object_type not in ('float', 'integer', 'monetary') and sub_field_object_type not in ('float', 'integer', 'monetary')"/>
+
+                                            <!--  Expression  -->
+                                            <field name="placeholder_expression" readonly="1" force_save="1"/>
+                                        </group>
+                                    </form>
+                                    <list>
+                                        <field name="hr_letters_id" invisible="1"/>
+                                        <field name="fields_direction"/>
+                                        <field name="static_fields"/>
+                                        <field name="model_object"/>
+                                        <field name="field_object"/>
+                                        <field name="sub_field_object"/>
+                                        <field name="placeholder_expression"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page name="version_control" string="Version Control">
+                                <field name="letter_version_control_line_ids" nolable="1">
+                                    <form>
+                                        <field name="letters_version_control_id" invisible="1"/>
+                                        <group>
+                                            <group>
+                                                <field name="name" required="1"/>
+                                            </group>
+                                            <group>
+                                                <field name="attachment_v_c" filename="name" widget="binary"
+                                                       required="1"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="create_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_letters_tree" model="ir.ui.view">
+        <field name="name">hr.letters.tree</field>
+        <field name="model">hr.letters</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_hr_letters" model="ir.actions.act_window">
+        <field name="name">Hr Letters</field>
+        <field name="res_model">hr.letters</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id"/>
+    </record>
+
+    <menuitem
+            id="hr_letters_config_setting"
+            name="Letters"
+            parent="hr.menu_human_resources_configuration"
+            action="action_hr_letters"
+            groups="base.group_erp_manager"
+            sequence="1"/>
+</odoo>

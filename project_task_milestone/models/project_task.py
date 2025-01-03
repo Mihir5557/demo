@@ -15,7 +15,7 @@ class ProjectTask(models.Model):
     )
 
     @api.model
-    def _read_group_milestone_ids(self, milestone_ids, domain, order):
+    def _read_group_milestone_ids(self, milestone_ids, domain, order=None):
         if "default_project_id" in self.env.context:
             milestone_ids = self.env["project.milestone"].search(
                 [("project_id", "=", self.env.context["default_project_id"])]
